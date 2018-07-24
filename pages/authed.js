@@ -7,22 +7,12 @@ export default class App extends Component {
         token: "none yet"
     }
 
-    getUrl(searchParams) {
-        const params = {
-            client_id: "26da4942f252fe0bc46c",
-            client_secret: "4d794cc7c51e4e9e7e1a7222ed23b7ef52abffb2",
-            code: searchParams.get('code'),
-        }
-        return "https://github.com/login/oauth/access_token?" + paramsify(params);
-    }
-
-    componentDidMount() {
+    static async getInitialProps() {
         this.setState({params: new URLSearchParams(window.location.search)});
-        fetch(this.getUrl(new URLSearchParams(window.location.search)), {
-            'method': 'POST',
-            'cors': ''
-        })
-        .then(res => {
+        fetch("/postauth", {
+            method: 'POST',
+            body: {search: window.location.search, state: }
+        }).then(res => {
             this.setState({token: res})
         })
     }
